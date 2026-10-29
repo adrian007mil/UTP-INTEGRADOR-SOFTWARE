@@ -283,3 +283,46 @@
     justify-content:flex-start;
   }
 }
+
+.stack {
+  display:grid;
+  gap:18px;
+}
+
+.stack .form-card .button {
+  width:auto;
+  padding-left:28px;
+  padding-right:28px;
+}
+
+.stack .form-card .text-link {
+  margin-left:14px;
+}
+
+.address-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:12px;
+}
+
+.address-card-item {
+  background:#fff;
+  border:1px solid var(--line);
+  padding:16px;
+  font-size:12px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.address-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+}
+
+.text-link.danger {
+  color:#a8493a;
+}

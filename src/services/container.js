@@ -14,6 +14,8 @@ import { createOrderService } from './order-service.js';
 import { createShipmentService } from './shipment-service.js';
 import { createDownloadService } from './download-service.js';
 import { createReviewService } from './review-service.js';
+import { createProfileService } from './profile-service.js';
+import { createPasswordResetService } from './password-reset-service.js';
 
 // Services receive the shared `services` object so they can call each other; this single
 // composition point is what a future fetch-based implementation replaces.
@@ -29,6 +31,8 @@ const FACTORIES = {
   shipments: createShipmentService,
   downloads: createDownloadService,
   reviews: createReviewService,
+  profile: createProfileService,
+  passwordReset: createPasswordResetService,
 };
 
 export function createContainer({ storage, now, random, wait }) {

@@ -1,9 +1,8 @@
 import { validateRegistration } from '../core/validators.js';
 import { AuthError, ConflictError, ForbiddenError } from '../core/errors.js';
-import { hashPassword, randomHex } from '../infra/crypto.js';
+import { createCredentials, verifyPassword } from './credentials.js';
 
 const SESSION_KEY = 'sesion';
-const SALT_BYTES = 16;
 const ACTIVE = 'A';
 const INVALID_CREDENTIALS = 'Usuario o contraseña incorrectos';
 const UNIQUE_FIELDS = [['email', 'correo'], ['usuario', 'nombre de usuario'], ['dni', 'DNI']];
@@ -39,9 +38,8 @@ export function createAuthService({ store, collections, deps }) {
   async function register(data) {
     const { contrasena, ...valid } = validateRegistration(data);
     await ensureUnique(valid);
-    const sal = randomHex(SALT_BYTES, deps.random);
     const user = await collections.usuarios.insert({
-      ...valid, rol: 'CLIENTE', sal, contrasenaHash: await hashPassword(contrasena, sal),
+      ...valid, rol: 'CLIENTE', ...(await createCredentials(contrasena, deps.random)),
       estado: ACTIVE, fechaRegistro: deps.now().toISOString(), ultimoAcceso: null,
     });
     return startSession(user);
@@ -50,7 +48,7 @@ export function createAuthService({ store, collections, deps }) {
   async function login(identificador, contrasena) {
     const id = String(identificador ?? '').trim().toLowerCase();
     const user = await collections.usuarios.findOneBy(u => u.usuario.toLowerCase() === id || u.email === id);
-    if (!user || user.contrasenaHash !== await hashPassword(String(contrasena ?? ''), user.sal)) throw new AuthError(INVALID_CREDENTIALS);
+    if (!user || !(await verifyPassword(contrasena, user))) throw new AuthError(INVALID_CREDENTIALS);
     if (user.estado !== ACTIVE) throw new AuthError('Tu cuenta está desactivada');
     return startSession(user);
   }

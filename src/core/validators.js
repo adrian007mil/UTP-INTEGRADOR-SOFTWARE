@@ -69,3 +69,7 @@ export function validateReceiptData(data) {
   if (tipo === 'BOLETA') return { tipo, ruc: null, razonSocial: null };
   return { tipo, ...validate(data, INVOICE_SCHEMA, 'Revisa los datos de facturación') };
 }
+
+export function validateProfile(data) {
+  return validate(data, PERSON_SCHEMA, 'Revisa tus datos personales');
+}

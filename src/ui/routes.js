@@ -12,6 +12,10 @@ import orderDetail from './views/account/order-detail.js';
 import downloads from './views/account/downloads.js';
 import learn from './views/learn.js';
 import learnCourse from './views/learn-course.js';
+import profile from './views/account/profile.js';
+import addresses from './views/account/addresses.js';
+import forgotPassword from './views/forgot-password.js';
+import resetPassword from './views/reset-password.js';
 
 export const ROUTES = [
   { pattern: '/', view: home },
@@ -28,4 +32,8 @@ export const ROUTES = [
   { pattern: '/cuenta/descargas', view: downloads },
   { pattern: '/aprende', view: learn },
   { pattern: '/aprende/:id', view: learnCourse },
+  { pattern: '/cuenta', view: profile },
+  { pattern: '/cuenta/direcciones', view: addresses },
+  { pattern: '/recuperar', view: forgotPassword },
+  { pattern: '/restablecer/:token', view: resetPassword },
 ];
