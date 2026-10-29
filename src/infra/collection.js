@@ -42,3 +42,7 @@ export function createCollection(store, name) {
     },
   };
 }
+
+export function createCollections(store, names) {
+  return Object.fromEntries(names.map(name => [name, createCollection(store, name)]));
+}
