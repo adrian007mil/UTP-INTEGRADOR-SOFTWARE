@@ -1,6 +1,6 @@
 import { addItem, setQuantity as setItemQuantity, removeItem, clampQuantity } from '../core/cart-rules.js';
 import { computeTotals, lineTotal } from '../core/totals.js';
-import { shippingCost } from '../core/shipping.js';
+import { shippingCost, hasPhysical } from '../core/shipping.js';
 
 const GUEST = 'invitado';
 
@@ -65,10 +65,20 @@ export function createCartService({ collections, services }) {
   const remove = idProducto => mutate(async items => removeItem(items, idProducto));
   const clear = () => mutate(async () => []);
 
-  async function totals(departamento) {
+  async function pricedLines() {
     const { lines } = await getCart();
-    const priced = lines.map(l => ({ precioUnitario: l.precioUnitario, cantidad: l.cantidad, tipoProducto: l.producto.tipoProducto }));
+    return lines.map(l => ({ precioUnitario: l.precioUnitario, cantidad: l.cantidad, tipoProducto: l.producto.tipoProducto }));
+  }
+
+  async function totals(departamento) {
+    const priced = await pricedLines();
     return computeTotals(priced, shippingCost(priced, departamento));
+  }
+
+  async function previewTotals(departamento) {
+    const priced = await pricedLines();
+    if (departamento || !hasPhysical(priced)) return computeTotals(priced, shippingCost(priced, departamento));
+    return { ...computeTotals(priced, 0), costoEnvio: null };
   }
 
   async function mergeGuestCart(idUsuario) {
@@ -89,5 +99,5 @@ export function createCartService({ collections, services }) {
 
   services.auth.onSessionChange(async user => { if (user) await mergeGuestCart(user.id); });
 
-  return { getCart, add, setQuantity, remove, clear, totals, mergeGuestCart };
+  return { getCart, add, setQuantity, remove, clear, totals, previewTotals, mergeGuestCart };
 }

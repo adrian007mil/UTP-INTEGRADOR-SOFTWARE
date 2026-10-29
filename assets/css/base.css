@@ -268,3 +268,7 @@ a {
 a.button {
   display:inline-block;
 }
+
+[hidden] {
+  display:none !important;
+}

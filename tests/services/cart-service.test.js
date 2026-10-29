@@ -91,3 +91,13 @@ test('al iniciar sesión se fusiona el carrito del invitado recortando al stock'
   await services.auth.logout();
   assert.equal((await services.cart.getCart()).lines.length, 0);
 });
+
+test('previewTotals sin departamento deja el envío pendiente si hay físicos', async () => {
+  const { services } = await createTestContainer();
+  await services.cart.add(1);
+  assert.deepEqual(await services.cart.previewTotals(null), { totalProductos: 489, subtotal: 414.41, igv: 74.59, costoEnvio: null, total: 489 });
+  assert.equal((await services.cart.previewTotals('Cusco')).costoEnvio, 25);
+  await services.cart.clear();
+  await services.cart.add(6);
+  assert.equal((await services.cart.previewTotals(null)).costoEnvio, 0);
+});
