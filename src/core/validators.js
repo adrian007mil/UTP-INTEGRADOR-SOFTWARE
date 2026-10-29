@@ -55,3 +55,17 @@ const ADDRESS_SCHEMA = {
 export function validateAddress(data) {
   return validate(data, ADDRESS_SCHEMA, 'Revisa los datos de la dirección');
 }
+
+export const RECEIPT_TYPES = ['BOLETA', 'FACTURA'];
+const BUSINESS_NAME_LIMITS = [3, 150];
+
+const INVOICE_SCHEMA = {
+  ruc: { rules: [patternRule(PATTERNS.ruc, 'El RUC tiene 11 dígitos y empieza con 10 o 20')] },
+  razonSocial: { rules: [lengthRule(...BUSINESS_NAME_LIMITS, 'La razón social')] },
+};
+
+export function validateReceiptData(data) {
+  const { tipo } = validate(data, { tipo: { normalize: value => text(value).toUpperCase(), rules: [value => (RECEIPT_TYPES.includes(value) ? null : 'Elige boleta o factura')] } });
+  if (tipo === 'BOLETA') return { tipo, ruc: null, razonSocial: null };
+  return { tipo, ...validate(data, INVOICE_SCHEMA, 'Revisa los datos de facturación') };
+}
