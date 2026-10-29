@@ -2,7 +2,7 @@
 
 Tienda web que reúne en un solo lugar la venta de **instrumentos musicales** y de **recursos para aprender música**: partituras, guías en PDF y cursos audiovisuales.
 
-Proyecto Integrador — Grupo 4, Ingeniería de Sistemas e Informática, Universidad Tecnológica del Perú (2026).
+Proyecto Integrador — Grupo , Ingeniería de Sistemas e Informática, Universidad Tecnológica del Perú (2026).
 
 > **Prototipo académico.** Esta versión es solo el frontend. No hay servidor: los datos se guardan en el navegador, los pagos y los correos son simulados y nada de esto es apto para una tienda real.
 
