@@ -586,3 +586,21 @@
     padding:35px 4% 60px;
   }
 }
+
+.product-info h3 a:hover {
+  text-decoration:underline;
+}
+
+.rating-new {
+  font-size:8px;
+  letter-spacing:.6px;
+  color:#8a9a6c;
+}
+
+.catalog-section.page-section {
+  padding-top:40px;
+}
+
+.filter-panel label {
+  flex-wrap:wrap;
+}

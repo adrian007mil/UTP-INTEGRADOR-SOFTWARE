@@ -611,3 +611,13 @@
     margin-top:3px;
   }
 }
+
+a.category-chip {
+  display:inline-flex;
+  align-items:center;
+  white-space:nowrap;
+}
+
+.featured-learning {
+  margin-top:34px;
+}

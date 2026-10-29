@@ -3,7 +3,7 @@ import { SEED_COURSES } from './seed-courses.js';
 import { SEED_USERS } from './seed-users.js';
 import { hashPassword, randomHex } from '../infra/crypto.js';
 
-export const SEED_VERSION = 1;
+export const SEED_VERSION = 2;
 export const DEFAULT_MIN_STOCK = 3;
 const SALT_BYTES = 16;
 const FILES_DIR = 'assets/files/';

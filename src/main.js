@@ -10,6 +10,7 @@ import { headerView } from './ui/layout/header.js';
 import { footerView } from './ui/layout/footer.js';
 import { recoveryView } from './ui/views/recovery.js';
 import { ROUTES } from './ui/routes.js';
+import { bindProductActions } from './ui/product-actions.js';
 
 const NOT_PERSISTENT_MESSAGE = 'Tu navegador no permite guardar datos: los cambios se perderán al cerrar la pestaña.';
 
@@ -42,6 +43,7 @@ async function boot() {
   const container = createContainer({ storage, now: () => new Date(), random: browserRandom, wait: ms => new Promise(r => setTimeout(r, ms)) });
   const ui = createUi();
   bindGlobalActions(container);
+  bindProductActions(document.body, ui);
   setHtml($('#siteFooter'), footerView());
   if (!persistent) ui.toast(NOT_PERSISTENT_MESSAGE);
   try {

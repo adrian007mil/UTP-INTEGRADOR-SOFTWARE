@@ -1,5 +1,5 @@
 const COMMONS = 'https://commons.wikimedia.org/wiki/File:';
-const UPLOAD = 'https://upload.wikimedia.org/wikipedia/commons/';
+const LOCAL_IMAGES = 'assets/img/';
 
 export const SEED_CATEGORIES = [
   { clave: 'cuerdas', nombre: 'Cuerdas', padre: null, descripcion: 'Guitarras, bajos y ukeleles' },
@@ -23,7 +23,7 @@ export const SEED_BRANDS = [
 ];
 
 function photo(path, file, credito) {
-  return [{ url: UPLOAD + path, credito, enlace: COMMONS + file }];
+  return [{ url: LOCAL_IMAGES + path, credito, enlace: COMMONS + file }];
 }
 
 export const SEED_PHYSICAL = [
@@ -31,49 +31,49 @@ export const SEED_PHYSICAL = [
     idPrototipo: 1, categoria: 'guitarras', marca: 'Cordoba', nombre: 'Guitarra acústica Sienna',
     descripcion: 'Tapa de abeto · sonido cálido · ideal para comenzar', precio: 489, precioAnterior: 559, stock: 7,
     tipoInstrumento: 'guitarra-acustica', familia: 'cuerda', tono: 'peach', etiqueta: 'MÁS VENDIDO', visual: '🎸',
-    imagenes: photo('thumb/c/c2/Acoustic_guitar.jpg/960px-Acoustic_guitar.jpg', 'Acoustic_guitar.jpg', 'Massimo Giuliani · dominio público'),
+    imagenes: photo('guitarra-acustica.jpg', 'Acoustic_guitar.jpg', 'Massimo Giuliani · dominio público'),
   },
   {
     idPrototipo: 2, categoria: 'teclados', marca: 'Casio', nombre: 'Teclado digital LK-120',
     descripcion: '61 teclas sensibles · 100 tonos · incluye atril', precio: 899, stock: 4,
     tipoInstrumento: 'teclado', familia: '', tono: 'blue', etiqueta: 'POPULAR', visual: '🎹',
-    imagenes: photo('thumb/f/f1/Piano_Keyboard.jpg/960px-Piano_Keyboard.jpg', 'Piano_Keyboard.jpg', 'Scott Detwiler · CC BY-SA 3.0'),
+    imagenes: photo('teclado.jpg', 'Piano_Keyboard.jpg', 'Scott Detwiler · CC BY-SA 3.0'),
   },
   {
     idPrototipo: 4, categoria: 'ukeleles', marca: 'Kala', nombre: 'Ukelele soprano Marea',
     descripcion: 'Madera de caoba · ligero · afinación estable', precio: 219, stock: 0,
     tipoInstrumento: 'ukelele', familia: 'cuerda', tono: 'sage', etiqueta: 'AGOTADO', visual: '🪕',
-    imagenes: photo('thumb/d/d1/Concert_sized_ukulele.jpg/960px-Concert_sized_ukulele.jpg', 'Concert_sized_ukulele.jpg', 'Naithik Shetty · CC0'),
+    imagenes: photo('ukelele.jpg', 'Concert_sized_ukulele.jpg', 'Naithik Shetty · CC0'),
   },
   {
     idPrototipo: 5, categoria: 'percusion', marca: 'Meinl', nombre: 'Cajón peruano Raíces',
     descripcion: 'Cuerpo de abedul · sonido grave y brillante', precio: 349, stock: 5,
     tipoInstrumento: 'cajon', familia: '', tono: 'sand', etiqueta: 'HECHO PARA EL RITMO', visual: '🥁',
-    imagenes: photo('thumb/d/da/Cajon3.JPG/960px-Cajon3.JPG', 'Cajon3.JPG', 'SLevinR · CC BY 3.0'),
+    imagenes: photo('cajon.jpg', 'Cajon3.JPG', 'SLevinR · CC BY 3.0'),
   },
   {
     idPrototipo: 7, categoria: 'audio', marca: 'Audio-Technica', nombre: 'Micrófono de condensador Aura',
     descripcion: 'Captura clara para voces, instrumentos y grabación', precio: 629, stock: 3,
     tipoInstrumento: 'microfono', familia: '', tono: 'rose', etiqueta: 'SELECCIÓN PRO', visual: '🎙',
-    imagenes: photo('thumb/c/ca/Microphone_studio.jpg/960px-Microphone_studio.jpg', 'Microphone_studio.jpg', 'Zzubnik · dominio público'),
+    imagenes: photo('microfono.jpg', 'Microphone_studio.jpg', 'Zzubnik · dominio público'),
   },
   {
     idPrototipo: 8, categoria: 'vientos', marca: 'Yamaha', nombre: 'Flauta dulce soprano',
     descripcion: 'Resina ABS · digitación barroca · funda incluida', precio: 79, stock: 14,
     tipoInstrumento: 'flauta', familia: 'aire', tono: 'yellow', etiqueta: 'IDEAL PARA EMPEZAR', visual: '🎶',
-    imagenes: photo('thumb/6/67/Flute_on_wood.jpg/960px-Flute_on_wood.jpg', 'Flute_on_wood.jpg', 'Ikal-balam · CC BY-SA 4.0'),
+    imagenes: photo('flauta.jpg', 'Flute_on_wood.jpg', 'Ikal-balam · CC BY-SA 4.0'),
   },
   {
     idPrototipo: 9, categoria: 'guitarras', marca: 'Gibson', nombre: 'Guitarra eléctrica vintage',
     descripcion: 'Cuerpo sólido · sonido versátil · ideal para rock y pop', precio: 1299, stock: 6,
     tipoInstrumento: 'guitarra-electrica', familia: 'cuerda', tono: 'rose', etiqueta: 'NUEVO', visual: '🎸',
-    imagenes: photo('9/9a/Elecguitar.jpg', 'Elecguitar.jpg', 'Swerver15 · dominio público'),
+    imagenes: photo('guitarra-electrica.jpg', 'Elecguitar.jpg', 'Swerver15 · dominio público'),
   },
   {
     idPrototipo: 10, categoria: 'bajos', marca: 'Yamaha', nombre: 'Bajo eléctrico de 4 cuerdas',
     descripcion: 'Cuatro cuerdas · sonido definido para ritmo y armonía', precio: 1399, stock: 3,
     tipoInstrumento: 'bajo', familia: 'cuerda', tono: 'sage', etiqueta: 'NUEVO', visual: '🎸', ajusteImagen: 'contain',
-    imagenes: photo('thumb/7/7e/Bass_guitar_%28instrument%29.jpg/500px-Bass_guitar_%28instrument%29.jpg', 'Bass_guitar_(instrument).jpg', 'Ziongarage · CC0'),
+    imagenes: photo('bajo.jpg', 'Bass_guitar_(instrument).jpg', 'Ziongarage · CC0'),
   },
 ];
 
