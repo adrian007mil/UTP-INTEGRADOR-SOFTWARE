@@ -220,3 +220,65 @@ td small {
     grid-template-columns:1fr;
   }
 }
+
+.range-form input[type="date"] {
+  border:1px solid var(--line);
+  background:#fff;
+  padding:8px;
+  font-size:12px;
+}
+
+.range-form .button {
+  padding:10px 14px;
+}
+
+.admin-columns {
+  display:grid;
+  grid-template-columns:1fr 1.4fr;
+  gap:16px;
+  align-items:start;
+}
+
+.admin-card {
+  overflow:auto;
+}
+
+.alert-list {
+  list-style:none;
+  margin:0;
+  padding:0 18px 12px;
+}
+
+.alert-list li {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 0;
+  border-top:1px solid #eeede8;
+  font-size:12px;
+}
+
+.alert-list li span:first-child {
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.alert-list small {
+  color:var(--muted);
+}
+
+.admin-card .muted {
+  padding:0 18px 16px;
+}
+
+.admin-reset {
+  margin-top:28px;
+  text-align:right;
+}
+
+@media (max-width:900px) {
+  .admin-columns {
+    grid-template-columns:1fr;
+  }
+}

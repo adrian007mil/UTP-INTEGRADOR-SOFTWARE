@@ -20,6 +20,7 @@ import adminOrders from './views/admin/orders.js';
 import adminProducts from './views/admin/products.js';
 import adminProductForm from './views/admin/product-form.js';
 import adminCategories from './views/admin/categories.js';
+import adminDashboard from './views/admin/dashboard.js';
 
 export const ROUTES = [
   { pattern: '/', view: home },
@@ -40,6 +41,7 @@ export const ROUTES = [
   { pattern: '/cuenta/direcciones', view: addresses },
   { pattern: '/recuperar', view: forgotPassword },
   { pattern: '/restablecer/:token', view: resetPassword },
+  { pattern: '/admin', view: adminDashboard },
   { pattern: '/admin/pedidos', view: adminOrders },
   { pattern: '/admin/productos', view: adminProducts },
   { pattern: '/admin/productos/nuevo', view: adminProductForm },
