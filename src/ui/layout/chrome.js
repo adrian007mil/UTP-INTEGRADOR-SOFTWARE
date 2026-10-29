@@ -4,8 +4,9 @@ import { accountMenu } from './account-menu.js';
 import { showError } from '../error-view.js';
 
 export async function renderChrome(ctx) {
-  const [user, cart] = await Promise.all([ctx.services.auth.currentUser(), ctx.services.cart.getCart()]);
-  const header = { user, path: ctx.path ?? '/', cartCount: cart.cantidadTotal, accountMenu: accountMenu(user) };
+  const { auth, cart, mailbox } = ctx.services;
+  const [user, currentCart, unread] = await Promise.all([auth.currentUser(), cart.getCart(), mailbox.unreadCount()]);
+  const header = { user, path: ctx.path ?? '/', cartCount: currentCart.cantidadTotal, accountMenu: accountMenu(user, { unread }) };
   setHtml($('#siteHeader'), headerView(header));
 }
 

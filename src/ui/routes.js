@@ -6,6 +6,7 @@ import register from './views/register.js';
 import checkout from './views/checkout.js';
 import orderConfirmation from './views/order-confirmation.js';
 import receipt from './views/receipt.js';
+import mailbox from './views/mailbox.js';
 
 export const ROUTES = [
   { pattern: '/', view: home },
@@ -16,4 +17,5 @@ export const ROUTES = [
   { pattern: '/checkout', view: checkout },
   { pattern: '/pedido/:id/confirmacion', view: orderConfirmation },
   { pattern: '/comprobante/:id', view: receipt },
+  { pattern: '/buzon', view: mailbox },
 ];
