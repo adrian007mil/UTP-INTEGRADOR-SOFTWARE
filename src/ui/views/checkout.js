@@ -3,7 +3,7 @@ import { $, $$, setHtml } from '../dom.js';
 import { handleSubmit } from '../components/form-errors.js';
 import { addressFields, addressSummary } from '../components/address-form.js';
 import { paymentSection, summaryView, testDataBox, readPayment } from './checkout-payment.js';
-import { PaymentDeclinedError } from '../../core/errors.js';
+import { PaymentDeclinedError, ConflictError } from '../../core/errors.js';
 import { showError } from '../error-view.js';
 
 const PROCESSING_LABEL = 'Procesando pago…';
@@ -30,7 +30,9 @@ function emptyCheckout() {
 async function refreshSummary(root, ctx) {
   const selected = $('input[name="idDireccion"]:checked', root);
   const totals = await ctx.services.cart.previewTotals(selected?.dataset.departamento ?? null);
-  setHtml($('#checkoutSummary', root), summaryView(await ctx.services.cart.getCart(), totals));
+  const summary = $('#checkoutSummary', root);
+  setHtml(summary, summaryView(await ctx.services.cart.getCart(), totals));
+  summary.dataset.total = totals.costoEnvio === null ? '' : String(totals.total);
 }
 
 function bindPaymentToggles(root) {
@@ -48,10 +50,12 @@ async function submitOrder(form, root, ctx, data) {
   $('#paymentError', root).textContent = '';
   try {
     const selected = $('input[name="idDireccion"]:checked', root);
-    const { pedido } = await ctx.services.checkout.placeOrder({ ...readPayment(data), idDireccion: selected ? Number(selected.value) : null });
+    const totalEsperado = $('#checkoutSummary', root).dataset.total;
+    const { pedido } = await ctx.services.checkout.placeOrder({ ...readPayment(data), idDireccion: selected ? Number(selected.value) : null, totalEsperado });
     ctx.navigate(`#/pedido/${pedido.id}/confirmacion`);
   } catch (error) {
     if (error instanceof PaymentDeclinedError) $('#paymentError', root).textContent = `Pago rechazado: ${error.reason}. Prueba con otro método.`;
+    if (error instanceof ConflictError) await refreshSummary(root, ctx);
     throw error;
   } finally {
     if (submit.isConnected) submit.innerHTML = label;

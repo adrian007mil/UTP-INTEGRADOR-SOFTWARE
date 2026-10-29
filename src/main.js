@@ -1,14 +1,15 @@
 import { resolveBrowserStorage } from './infra/storage.js';
 import { browserRandom } from './infra/crypto.js';
 import { StorageCorruptedError } from './core/errors.js';
-import { createContainer } from './services/container.js';
+import { startContainer } from './services/bootstrap.js';
+import { createStore } from './infra/store.js';
 import { createRouter } from './ui/router.js';
 import { createToast } from './ui/toast.js';
 import { createModal } from './ui/modal.js';
 import { $, setHtml, delegate } from './ui/dom.js';
 import { renderChrome, bindChromeActions } from './ui/layout/chrome.js';
 import { footerView } from './ui/layout/footer.js';
-import { recoveryView } from './ui/views/recovery.js';
+import { recoveryView, startupErrorView } from './ui/views/recovery.js';
 import { ROUTES } from './ui/routes.js';
 import { bindProductActions } from './ui/product-actions.js';
 import { createCartDrawer } from './ui/layout/cart-drawer.js';
@@ -38,32 +39,42 @@ function createUi() {
   return ui;
 }
 
-function bindGlobalActions(container) {
+function bindRecoveryAction(storage) {
   delegate(document.body, 'click', '[data-reset-storage]', () => {
-    container.store.clearAll();
+    createStore(storage).clearAll();
     location.reload();
   });
 }
 
-async function boot() {
-  const { storage, persistent } = resolveBrowserStorage(window);
-  const container = createContainer({ storage, now: () => new Date(), random: browserRandom, wait: ms => new Promise(r => setTimeout(r, ms)) });
-  const ui = createUi();
-  bindGlobalActions(container);
-  const productActions = bindProductActions(document.body, ui, container.services);
-  bindChromeActions(ui, container.services);
-  ui.cartDrawer = createCartDrawer(ui, container.services);
-  setHtml($('#siteFooter'), footerView());
-  if (!persistent) ui.toast(NOT_PERSISTENT_MESSAGE);
-  try {
-    await container.seed({ withDemoHistory: true });
-  } catch (error) {
-    if (!(error instanceof StorageCorruptedError)) throw error;
-    return ui.renderPage(recoveryView());
-  }
-  const router = createRouter({ routes: ROUTES, ui, services: container.services, getUser: () => container.services.auth.currentUser(), onRendered: async ctx => { await renderChrome(ctx); await productActions.refreshCompareBar(); } });
+function startApp(container, ui) {
+  const { services } = container;
+  const productActions = bindProductActions(document.body, ui, services);
+  bindChromeActions(ui, services);
+  ui.cartDrawer = createCartDrawer(ui, services);
+  const onRendered = async ctx => {
+    await renderChrome(ctx);
+    await productActions.refreshCompareBar();
+  };
+  const router = createRouter({ routes: ROUTES, ui, services, getUser: () => services.auth.currentUser(), onRendered });
   ui.refresh = router.render;
   return router.start();
 }
 
-boot();
+async function boot(ui) {
+  const browser = resolveBrowserStorage(window);
+  bindRecoveryAction(browser.storage);
+  setHtml($('#siteFooter'), footerView());
+  try {
+    const deps = { now: () => new Date(), random: browserRandom, wait: ms => new Promise(resolve => setTimeout(resolve, ms)) };
+    const { container, persistent } = await startContainer({ ...browser, ...deps });
+    if (!persistent) ui.toast(NOT_PERSISTENT_MESSAGE);
+    return startApp(container, ui);
+  } catch (error) {
+    if (error instanceof StorageCorruptedError) return ui.renderPage(recoveryView());
+    globalThis.reportError?.(error);
+    return ui.renderPage(startupErrorView());
+  }
+}
+
+const appUi = createUi();
+boot(appUi);

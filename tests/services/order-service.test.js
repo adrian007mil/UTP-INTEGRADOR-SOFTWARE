@@ -65,7 +65,7 @@ test('ids inexistentes lanzan NotFoundError y sin sesión AuthError', async () =
 test('listMyOrders devuelve resúmenes del usuario, más recientes primero', async () => {
   const { services, clock, address } = await demoOrder();
   clock.advance(60000);
-  await services.cart.add(6);
+  await services.cart.add(11);
   await services.checkout.placeOrder({ metodoPago: 'TRANSFERENCIA', detallesPago: {}, comprobante: { tipo: 'BOLETA' } });
   const list = await services.orders.listMyOrders();
   assert.deepEqual(list.map(o => [o.pedido.id, o.cantidadItems, o.estadoEnvio]), [[2, 1, null], [1, 2, 'PROCESANDO']]);
@@ -93,7 +93,7 @@ test('advanceShipment (admin) asigna seguimiento, fechas, historial y avisa al c
 test('advanceShipment de un cliente lanza ForbiddenError y de pedido sin envío ConflictError', async () => {
   const { services } = await demoOrder();
   await assert.rejects(services.orders.advanceShipment(1), ForbiddenError);
-  await services.cart.add(6);
+  await services.cart.add(11);
   const { pedido } = await services.checkout.placeOrder({ metodoPago: 'TRANSFERENCIA', detallesPago: {}, comprobante: { tipo: 'BOLETA' } });
   await services.auth.logout();
   await loginAdmin(services);

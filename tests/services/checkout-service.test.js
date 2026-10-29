@@ -177,3 +177,26 @@ test('carrito vacío o sin sesión fallan', async () => {
 });
 
 test('el retardo de la pasarela es de 1.5 s', () => { assert.equal(PAYMENT_DELAY_MS, 1500); });
+
+test('si el total cambió respecto del que vio el cliente, placeOrder rechaza sin cobrar', async () => {
+  const { services, collections, address } = await readyToBuy();
+  await services.cart.add(1);
+  const shown = (await services.cart.totals('Lima')).total;
+  await collections.productos.update(1, { precio: 520 });
+  const before = await counts(collections);
+  await assert.rejects(services.checkout.placeOrder({ idDireccion: address.id, metodoPago: 'TARJETA', detallesPago: APPROVED_CARD, comprobante: BOLETA, totalEsperado: shown }),
+    { name: 'ConflictError', message: 'El total de tu pedido cambió; revisa el resumen antes de pagar' });
+  assert.deepEqual(await counts(collections), before);
+});
+
+test('si el carrito cambia durante la autorización del pago, se revierte y no se borran productos ajenos al pedido', async () => {
+  let servicesRef;
+  const wait = async () => { await servicesRef.cart.add(8); };
+  const { services, collections, address } = await readyToBuy({ wait });
+  servicesRef = services;
+  await services.cart.add(1);
+  const before = await counts(collections);
+  await assert.rejects(services.checkout.placeOrder({ idDireccion: address.id, metodoPago: 'TARJETA', detallesPago: APPROVED_CARD, comprobante: BOLETA }), ConflictError);
+  assert.deepEqual(await counts(collections), before);
+  assert.deepEqual((await services.cart.getCart()).lines.map(l => l.producto.id), [1, 8]);
+});

@@ -101,3 +101,21 @@ test('previewTotals sin departamento deja el envío pendiente si hay físicos', 
   await services.cart.add(6);
   assert.equal((await services.cart.previewTotals(null)).costoEnvio, 0);
 });
+
+test('no se puede volver a comprar un digital ya comprado ni uno con pago pendiente', async () => {
+  const { services } = await createTestContainer({ withDemoHistory: true });
+  await services.auth.login('cliente.demo', 'Demo2026!');
+  await assert.rejects(services.cart.add(6), { name: 'ConflictError', message: 'Ya tienes este producto: está en Mis descargas' });
+  await services.cart.add(3);
+  await services.checkout.placeOrder({ metodoPago: 'TRANSFERENCIA', detallesPago: {}, comprobante: { tipo: 'BOLETA' } });
+  await assert.rejects(services.cart.add(3), { name: 'ConflictError', message: 'Ya tienes un pedido pendiente de pago con este producto' });
+  await services.cart.add(1);
+});
+
+test('al fusionar el carrito del invitado se descartan digitales ya comprados', async () => {
+  const { services } = await createTestContainer({ withDemoHistory: true });
+  await services.cart.add(6);
+  await services.cart.add(3);
+  await services.auth.login('cliente.demo', 'Demo2026!');
+  assert.deepEqual((await services.cart.getCart()).lines.map(l => l.producto.id), [3]);
+});

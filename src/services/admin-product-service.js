@@ -44,7 +44,9 @@ export function createAdminProductService({ collections, services, deps }) {
     const current = await collections.productos.findById(id);
     const { producto, inventario } = await validated(data);
     if (producto.tipoProducto !== current.tipoProducto) throw new ConflictError('No se puede cambiar el tipo de un producto existente');
-    const updated = await collections.productos.update(current.id, producto);
+    const sameImage = producto.imagenes[0]?.url === current.imagenes?.[0]?.url;
+    const preserved = { imagenes: sameImage ? current.imagenes : producto.imagenes, etiqueta: String(data?.etiqueta ?? '').trim() ? producto.etiqueta : current.etiqueta };
+    const updated = await collections.productos.update(current.id, { ...producto, ...preserved });
     if (inventario) await saveStock(current.id, inventario);
     return updated;
   }

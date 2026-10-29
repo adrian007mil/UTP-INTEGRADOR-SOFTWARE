@@ -65,3 +65,12 @@ test('un cliente no puede administrar productos', async () => {
   await assert.rejects(services.adminProducts.create(NEW_PRODUCT), ForbiddenError);
   await assert.rejects(services.adminProducts.list(), ForbiddenError);
 });
+
+test('editar sin cambiar la imagen conserva el crédito de la foto y la etiqueta si se deja vacía', async () => {
+  const { services, collections } = await admin();
+  const before = await collections.productos.findById(1);
+  await services.adminProducts.update(1, { ...NEW_PRODUCT, idMarca: '1', imagen: before.imagenes[0].url, etiqueta: '' });
+  const after = await collections.productos.findById(1);
+  assert.deepEqual(after.imagenes, before.imagenes);
+  assert.equal(after.etiqueta, before.etiqueta);
+});

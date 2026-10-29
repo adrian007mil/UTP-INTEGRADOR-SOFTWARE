@@ -38,5 +38,14 @@ export function createDownloadService({ collections, services, deps }) {
     return (await paidDigitalDetails(user.id)).some(({ detalle }) => detalle.idProducto === Number(idProducto));
   }
 
-  return { listMyDownloads, registerDownload, hasAccess };
+  async function purchaseStatus(idProducto) {
+    const user = await services.auth.currentUser();
+    if (!user) return null;
+    if (await hasAccess(idProducto)) return 'PAGADO';
+    const pendientes = new Set((await collections.pedidos.findBy(p => p.idUsuario === user.id && p.estado === 'PENDIENTE_PAGO')).map(p => p.id));
+    const pending = await collections.detallesPedido.findOneBy(det => pendientes.has(det.idPedido) && det.idProducto === Number(idProducto));
+    return pending ? 'PENDIENTE' : null;
+  }
+
+  return { listMyDownloads, registerDownload, hasAccess, purchaseStatus };
 }

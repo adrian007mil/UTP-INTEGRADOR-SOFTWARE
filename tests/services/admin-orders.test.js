@@ -4,7 +4,7 @@ import { createTestContainer } from '../helpers/test-container.js';
 import { loginDemo, loginAdmin, ADDRESS } from '../helpers/fixtures.js';
 import { ForbiddenError, ConflictError } from '../../src/core/errors.js';
 
-async function pendingTransfer(items = [[1, 1], [6, 1]]) {
+async function pendingTransfer(items = [[1, 1], [3, 1]]) {
   const container = await createTestContainer({ withDemoHistory: true });
   const { services } = container;
   await loginDemo(services);

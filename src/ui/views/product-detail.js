@@ -38,16 +38,23 @@ function syllabus(producto) {
     <a class="text-link" href="#/aprende/${producto.id}">Ver vista previa del curso ↗</a></section>`;
 }
 
-function buyButton(producto) {
+const OWNED_ACTIONS = {
+  PAGADO: { texto: 'Ya es tuyo — ir a Mis descargas', href: '#/cuenta/descargas' },
+  PENDIENTE: { texto: 'Pago pendiente — ver Mis pedidos', href: '#/cuenta/pedidos' },
+};
+
+function buyButton(producto, purchase) {
+  const owned = OWNED_ACTIONS[purchase];
+  if (owned) return html`<a class="button button-outline owned-button" href="${owned.href}">${owned.texto}</a>`;
   if (producto.stock === 0) return html`<button class="button button-dark" disabled>Agotado</button>`;
   return html`<button class="button button-dark" data-add="${producto.id}">Agregar al carrito <span>＋</span></button>`;
 }
 
-function detailCopy(producto) {
+function detailCopy(producto, purchase) {
   return html`<div class="detail-copy"><span class="eyebrow">${TYPE_LABELS[producto.tipoProducto]} · ${producto.categoria?.nombre}</span>
     <h1>${producto.nombre}</h1><div class="product-meta"><span>${producto.marca?.nombre}</span>${ratingBadge(producto)}</div>
     <p>${producto.descripcion}</p><ul class="detail-facts">${digitalFacts(producto)}<li>Precio incluye IGV</li></ul>
-    ${priceTag(producto)}<p class="detail-stock ${producto.stock === 0 ? 'out' : ''}">${stockText(producto)}</p>${buyButton(producto)}</div>`;
+    ${priceTag(producto)}<p class="detail-stock ${producto.stock === 0 ? 'out' : ''}">${stockText(producto)}</p>${buyButton(producto, purchase)}</div>`;
 }
 
 export default {
@@ -56,10 +63,11 @@ export default {
   async render(ctx) {
     const producto = await ctx.services.catalog.getProduct(ctx.params.id);
     ctx.pageTitle = producto.nombre;
+    const purchase = producto.tipoProducto === 'FISICO' ? null : await ctx.services.downloads.purchaseStatus(producto.id);
     return html`<article class="page-section product-page">
       <nav class="breadcrumb" aria-label="Ruta"><a href="#/">Inicio</a> / <a href="#/catalogo">Catálogo</a> /
         <a href="#/catalogo?cat=${producto.idCategoria}">${producto.categoria?.nombre}</a></nav>
-      <div class="detail-layout">${gallery(producto)}${detailCopy(producto)}</div>${syllabus(producto)}
+      <div class="detail-layout">${gallery(producto)}${detailCopy(producto, purchase)}</div>${syllabus(producto)}
       <div id="productReviews" data-product="${producto.id}"></div></article>`;
   },
   mount(root, ctx) {

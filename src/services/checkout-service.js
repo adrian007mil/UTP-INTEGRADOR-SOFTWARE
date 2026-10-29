@@ -2,10 +2,19 @@ import { ConflictError, PaymentDeclinedError, ValidationError } from '../core/er
 import { authorizePayment, BANK_ACCOUNT } from '../core/payment-gateway.js';
 import { validateReceiptData } from '../core/validators.js';
 import { lineTotal } from '../core/totals.js';
-import { formatMoney } from '../core/money.js';
+import { formatMoney, toCents } from '../core/money.js';
 import { randomHex } from '../infra/crypto.js';
 
 export const PAYMENT_DELAY_MS = 1500;
+
+const TOTAL_CHANGED = 'El total de tu pedido cambió; revisa el resumen antes de pagar';
+const CART_CHANGED = 'Tu carrito cambió mientras se procesaba el pago; revisa el resumen';
+const cartSignature = cart => cart.lines.map(l => `${l.producto.id}:${l.cantidad}:${toCents(l.precioUnitario)}`).join('|');
+
+function assertTotalUnchanged(totalEsperado, totals) {
+  if (totalEsperado === undefined || totalEsperado === null || totalEsperado === '') return;
+  if (toCents(Number(totalEsperado)) !== toCents(totals.total)) throw new ConflictError(TOTAL_CHANGED);
+}
 
 function assertCartReady(cart) {
   if (cart.lines.length === 0) throw new ConflictError('Tu carrito está vacío');
@@ -55,6 +64,7 @@ export function createCheckoutService({ store, collections, services, deps }) {
 
   async function persist(user, cart, address, totals, payment, order) {
     return store.transact(async () => {
+      if (cartSignature(await services.cart.getCart()) !== cartSignature(cart)) throw new ConflictError(CART_CHANGED);
       const pedido = await createOrder(user, cart, address, totals, payment, order);
       await services.cart.clear();
       if (payment.estado !== 'APROBADO') {
@@ -66,13 +76,14 @@ export function createCheckoutService({ store, collections, services, deps }) {
     });
   }
 
-  async function charge({ idDireccion, metodoPago, detallesPago, comprobante }) {
+  async function charge({ idDireccion, metodoPago, detallesPago, comprobante, totalEsperado }) {
     const user = await services.auth.requireUser();
     const receipt = validateReceiptData(comprobante);
     const cart = await services.cart.getCart();
     assertCartReady(cart);
     const address = await shippingAddress(cart, idDireccion);
     const totals = await services.cart.totals(address?.departamento ?? null);
+    assertTotalUnchanged(totalEsperado, totals);
     await deps.wait(PAYMENT_DELAY_MS);
     const payment = authorizePayment(metodoPago, detallesPago, totals.total, { now: deps.now, randomHex: bytes => randomHex(bytes, deps.random) });
     if (payment.estado === 'RECHAZADO') throw new PaymentDeclinedError('El pago fue rechazado', payment.respuesta);

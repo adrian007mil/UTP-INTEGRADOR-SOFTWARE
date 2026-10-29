@@ -1,8 +1,13 @@
 import { addItem, setQuantity as setItemQuantity, removeItem, clampQuantity } from '../core/cart-rules.js';
 import { computeTotals, lineTotal } from '../core/totals.js';
+import { ConflictError } from '../core/errors.js';
 import { shippingCost, hasPhysical } from '../core/shipping.js';
 
 const GUEST = 'invitado';
+const OWNERSHIP_MESSAGES = {
+  PAGADO: 'Ya tienes este producto: está en Mis descargas',
+  PENDIENTE: 'Ya tienes un pedido pendiente de pago con este producto',
+};
 
 function lineProblem(producto, cantidad) {
   if (producto.estado !== 'A') return 'Ya no está disponible';
@@ -52,13 +57,21 @@ export function createCartService({ collections, services }) {
     return getCart();
   }
 
+  async function assertNotOwned(producto) {
+    if (producto.tipoProducto === 'FISICO') return;
+    const status = await services.downloads.purchaseStatus(producto.id);
+    if (status) throw new ConflictError(OWNERSHIP_MESSAGES[status]);
+  }
+
   const add = (idProducto, cantidad = 1) => mutate(async (items, context) => {
     const producto = await productView(idProducto, context);
+    await assertNotOwned(producto);
     return addItem(items, producto, producto.stock, cantidad);
   });
 
   const setQuantity = (idProducto, cantidad) => mutate(async (items, context) => {
     const producto = await productView(idProducto, context);
+    await assertNotOwned(producto);
     return setItemQuantity(items, producto, producto.stock, cantidad);
   });
 
@@ -90,7 +103,11 @@ export function createCartService({ collections, services }) {
         const total = (acc.get(line.producto.id)?.cantidad ?? 0) + line.cantidad;
         return acc.set(line.producto.id, { producto: line.producto, cantidad: total });
       }, new Map());
-    const items = [...merged.values()]
+    const purchasable = [];
+    for (const entry of merged.values()) {
+      if (entry.producto.tipoProducto === 'FISICO' || !(await services.downloads.purchaseStatus(entry.producto.id))) purchasable.push(entry);
+    }
+    const items = purchasable
       .map(({ producto, cantidad }) => ({ idProducto: producto.id, cantidad: clampQuantity(producto, producto.stock, cantidad) }))
       .filter(item => item.cantidad > 0);
     await saveItems(idUsuario, items);
