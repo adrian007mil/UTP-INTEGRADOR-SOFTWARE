@@ -25,7 +25,7 @@ export function createRouter({ routes, ui, services, getUser, onRendered }) {
     else {
       ui.renderPage(await view.render(ctx));
       view.mount?.(ui.root, ctx);
-      document.title = `${view.title} · ${SITE_NAME}`;
+      document.title = `${ctx.pageTitle ?? view.title} · ${SITE_NAME}`;
     }
     return onRendered?.(ctx);
   }
