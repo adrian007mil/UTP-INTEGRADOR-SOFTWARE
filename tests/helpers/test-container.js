@@ -16,10 +16,10 @@ export function createDeterministicRandom() {
   return length => Uint8Array.from({ length }, () => { counter = (counter + 37) % 256; return counter; });
 }
 
-export async function createTestContainer({ withDemoHistory = false, start } = {}) {
+export async function createTestContainer({ withDemoHistory = false, start, wait = async () => {} } = {}) {
   const clock = createClock(start);
   const container = createContainer({
-    storage: createMemoryStorage(), now: clock.now, random: createDeterministicRandom(), wait: async () => {},
+    storage: createMemoryStorage(), now: clock.now, random: createDeterministicRandom(), wait,
   });
   await container.seed({ withDemoHistory });
   return { ...container, clock };
