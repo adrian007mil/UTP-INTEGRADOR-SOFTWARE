@@ -2,6 +2,8 @@ import { html } from '../html.js';
 import { $, $$ } from '../dom.js';
 import { productVisual, priceTag } from '../components/product-card.js';
 import { ratingBadge } from '../components/stars.js';
+import { renderReviews } from '../components/review-form.js';
+import { showError } from '../error-view.js';
 
 const LOW_STOCK_THRESHOLD = 5;
 const TYPE_LABELS = { FISICO: 'Instrumento', DIGITAL: 'Documento digital', AUDIOVISUAL: 'Curso audiovisual' };
@@ -60,7 +62,8 @@ export default {
       <div class="detail-layout">${gallery(producto)}${detailCopy(producto)}</div>${syllabus(producto)}
       <div id="productReviews" data-product="${producto.id}"></div></article>`;
   },
-  mount(root) {
+  mount(root, ctx) {
+    renderReviews($('#productReviews', root), ctx).catch(error => showError(error, ctx));
     $$('[data-image]', root).forEach(button => button.addEventListener('click', () => {
       const image = $('#detailVisual img', root);
       if (image) image.src = button.dataset.image;
