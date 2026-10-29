@@ -307,3 +307,20 @@
     font-size:11px;
   }
 }
+
+.footer-reset {
+  font-size:10px;
+  padding:0;
+  color:#6d7c54;
+}
+
+@media (max-width:650px) {
+  .account-menu summary .account-name,
+  .account-link .account-name {
+    display:none;
+  }
+
+  .account-dropdown {
+    right:-60px;
+  }
+}

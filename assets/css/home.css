@@ -621,3 +621,14 @@ a.category-chip {
 .featured-learning {
   margin-top:34px;
 }
+
+@media (max-width:650px) {
+  .hero {
+    min-height:780px;
+  }
+
+  .hero-actions {
+    position:relative;
+    z-index:3;
+  }
+}

@@ -22,6 +22,7 @@ import { createAdminCategoryService } from './admin-category-service.js';
 import { createDashboardService } from './dashboard-service.js';
 import { createAdminUserService } from './admin-user-service.js';
 import { createPreferencesService } from './preferences-service.js';
+import { createDemoService } from './demo-service.js';
 
 // Services receive the shared `services` object so they can call each other; this single
 // composition point is what a future fetch-based implementation replaces.
@@ -71,6 +72,8 @@ export function createContainer({ storage, now, random, wait }) {
     const afterSeed = withDemoHistory ? () => withoutPaymentDelay(() => seedDemoHistory({ services, collections })) : undefined;
     await ensureSeeded(store, collections, deps, { afterSeed });
   }
+
+  services.demo = createDemoService({ store, reseed: () => seed({ withDemoHistory: true }) });
 
   return { store, collections, deps, services, seed };
 }

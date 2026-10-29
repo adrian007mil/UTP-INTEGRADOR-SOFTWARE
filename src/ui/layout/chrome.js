@@ -10,7 +10,19 @@ export async function renderChrome(ctx) {
   setHtml($('#siteHeader'), headerView(header));
 }
 
+const RESET_CONFIRMATION = 'Se borrarán tus cambios y volverás a los datos de ejemplo. ¿Continuar?';
+
 export function bindChromeActions(ui, services) {
+  delegate(document.body, 'click', '[data-reset-demo]', async () => {
+    if (!window.confirm(RESET_CONFIRMATION)) return;
+    try {
+      await services.demo.reset();
+      location.hash = '#/';
+      location.reload();
+    } catch (error) {
+      showError(error, ui);
+    }
+  });
   delegate(document.body, 'click', '[data-logout]', async () => {
     try {
       await services.auth.logout();
