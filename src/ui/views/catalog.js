@@ -1,6 +1,6 @@
 import { html } from '../html.js';
 import { $, setHtml } from '../dom.js';
-import { productCard } from '../components/product-card.js';
+import { cardFlags } from '../components/product-card.js';
 import { showError } from '../error-view.js';
 import { filtersForm, criteriaFromQuery, queryFromCriteria, readCriteria } from './catalog-filters.js';
 
@@ -11,11 +11,11 @@ const GROUPS = [
   { tipo: 'AUDIOVISUAL', numero: '03 / AUDIOVISUAL', titulo: 'Material audiovisual', texto: 'Cursos en video organizados por capítulos.' },
 ];
 
-function group(definition, products) {
+function group(definition, products, flags) {
   if (products.length === 0) return '';
   return html`<section class="catalog-group"><div class="group-heading"><span>${definition.numero}</span>
     <div><h3>${definition.titulo}</h3><p>${definition.texto}</p></div></div>
-    <div class="product-grid">${products.map(p => productCard(p))}</div></section>`;
+    <div class="product-grid">${products.map(cardFlags(flags))}</div></section>`;
 }
 
 function emptyState() {
@@ -30,16 +30,16 @@ function photoCredits(products) {
     <p>${items}Fotografías de referencia; no representan necesariamente el producto exacto en venta.</p></details>`;
 }
 
-export function catalogResults(products, total) {
-  const groups = GROUPS.map(definition => group(definition, products.filter(p => p.tipoProducto === definition.tipo)));
+export function catalogResults(products, total, flags) {
+  const groups = GROUPS.map(definition => group(definition, products.filter(p => p.tipoProducto === definition.tipo), flags));
   return html`${products.length ? groups : emptyState()}
     <div class="catalog-footer"><span>Mostrando ${products.length} de ${total} productos</span></div>`;
 }
 
 async function refreshResults(form, ctx, total) {
   const criteria = readCriteria(form);
-  const products = await ctx.services.catalog.listProducts(criteria);
-  setHtml($('#catalogResults'), catalogResults(products, total));
+  const [products, flags] = await Promise.all([ctx.services.catalog.listProducts(criteria), ctx.services.preferences.flags()]);
+  setHtml($('#catalogResults'), catalogResults(products, total, flags));
   const query = queryFromCriteria(criteria).toString();
   history.replaceState(null, '', `#/catalogo${query ? `?${query}` : ''}`);
 }
@@ -49,14 +49,14 @@ export default {
   access: 'public',
   async render(ctx) {
     const criteria = criteriaFromQuery(ctx.query);
-    const [products, all, tree, brands] = await Promise.all([
+    const [products, all, tree, brands, flags] = await Promise.all([
       ctx.services.catalog.listProducts(criteria), ctx.services.catalog.listProducts({}),
-      ctx.services.catalog.listCategories(), ctx.services.catalog.listBrands(),
+      ctx.services.catalog.listCategories(), ctx.services.catalog.listBrands(), ctx.services.preferences.flags(),
     ]);
     return html`<section class="catalog-section page-section" id="catalogo">
       <div class="section-heading"><div><div class="eyebrow">SELECCIÓN PARA TI</div><h2>Explora el catálogo<span class="brand-dot">.</span></h2>
         <p>Todo lo que necesitas para hacer música, en un mismo lugar.</p></div></div>
-      ${filtersForm(criteria, { tree, brands })}<div id="catalogResults" data-total="${all.length}">${catalogResults(products, all.length)}</div>
+      ${filtersForm(criteria, { tree, brands })}<div id="catalogResults" data-total="${all.length}">${catalogResults(products, all.length, flags)}</div>
       ${photoCredits(all)}</section>`;
   },
   mount(root, ctx) {

@@ -2,6 +2,8 @@ import { html } from '../html.js';
 import { formatMoney } from '../../core/money.js';
 import { NotFoundError } from '../../core/errors.js';
 import { downloadButton, bindDownloadButtons } from '../components/download-button.js';
+import { delegate } from '../dom.js';
+import { showError } from '../error-view.js';
 
 const YOUTUBE_EMBED = 'https://www.youtube-nocookie.com/embed/';
 const YOUTUBE_WATCH = 'https://www.youtube.com/watch?v=';
@@ -13,7 +15,7 @@ function videoPreview(producto) {
       <a href="${YOUTUBE_WATCH}${producto.videoId}" target="_blank" rel="noreferrer">Abrir en YouTube ↗</a></div>`;
 }
 
-export function chapterList(producto, { owned, completados = [] }) {
+export function chapterList(producto, { owned, completados = [], porcentaje = 0 }) {
   const items = producto.capitulos.map((capitulo, index) => {
     const done = completados.includes(index);
     const control = owned
@@ -22,7 +24,8 @@ export function chapterList(producto, { owned, completados = [] }) {
     return html`<li>${control}<span>${String(index + 1).padStart(2, '0')}</span><b>${capitulo}</b></li>`;
   });
   return html`<div class="lesson-chapters"><div class="chapters-heading"><span class="eyebrow">TEMARIO</span>
-    <span>${owned ? `${completados.length} de ${producto.capitulos.length} completados` : 'Compra el curso para desbloquear todos los capítulos'}</span></div><ol>${items}</ol></div>`;
+    <span>${owned ? `${completados.length} de ${producto.capitulos.length} completados` : 'Compra el curso para desbloquear todos los capítulos'}</span></div>
+    ${owned ? html`<span class="progress-track" aria-hidden="true"><b style="width:${porcentaje}%"></b></span>` : ''}<ol>${items}</ol></div>`;
 }
 
 function accessPanel(producto, detalle) {
@@ -48,12 +51,21 @@ export default {
     if (producto.tipoProducto !== 'AUDIOVISUAL') throw new NotFoundError('Este recurso no es un curso');
     ctx.pageTitle = producto.nombre;
     const detalle = await ownedDetail(ctx, producto.id);
+    const progress = detalle ? await ctx.services.preferences.progress(producto.id) : {};
     return html`<section class="page-section course-page"><a class="text-link" href="#/aprende">← Aprende</a>
       <div class="course-modal"><span class="eyebrow">${producto.etiqueta}</span><h2>${producto.nombre}</h2><p class="course-description">${producto.descripcion}</p>
-        <div class="course-layout"><div>${videoPreview(producto)}${chapterList(producto, { owned: Boolean(detalle) })}</div>${accessPanel(producto, detalle)}</div>
+        <div class="course-layout"><div>${videoPreview(producto)}${chapterList(producto, { owned: Boolean(detalle), ...progress })}</div>${accessPanel(producto, detalle)}</div>
         <p class="course-disclaimer">El video es una muestra externa de YouTube; los capítulos son la estructura propuesta por OmniMelody.</p></div></section>`;
   },
   mount(root, ctx) {
     bindDownloadButtons(root, ctx);
+    delegate(root, 'click', '[data-chapter]', async (event, button) => {
+      try {
+        await ctx.services.preferences.toggleChapter(Number(ctx.params.id), Number(button.dataset.chapter));
+        await ctx.refresh();
+      } catch (error) {
+        showError(error, ctx);
+      }
+    });
   },
 };

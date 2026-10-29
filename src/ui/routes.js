@@ -22,6 +22,9 @@ import adminProductForm from './views/admin/product-form.js';
 import adminCategories from './views/admin/categories.js';
 import adminDashboard from './views/admin/dashboard.js';
 import adminUsers from './views/admin/users.js';
+import favorites from './views/favorites.js';
+import compare from './views/compare.js';
+import quiz from './views/quiz.js';
 
 export const ROUTES = [
   { pattern: '/', view: home },
@@ -42,6 +45,9 @@ export const ROUTES = [
   { pattern: '/cuenta/direcciones', view: addresses },
   { pattern: '/recuperar', view: forgotPassword },
   { pattern: '/restablecer/:token', view: resetPassword },
+  { pattern: '/favoritos', view: favorites },
+  { pattern: '/comparar', view: compare },
+  { pattern: '/recomendador', view: quiz },
   { pattern: '/admin', view: adminDashboard },
   { pattern: '/admin/pedidos', view: adminOrders },
   { pattern: '/admin/productos', view: adminProducts },

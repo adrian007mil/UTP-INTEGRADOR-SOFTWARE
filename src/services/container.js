@@ -21,6 +21,7 @@ import { createAdminProductService } from './admin-product-service.js';
 import { createAdminCategoryService } from './admin-category-service.js';
 import { createDashboardService } from './dashboard-service.js';
 import { createAdminUserService } from './admin-user-service.js';
+import { createPreferencesService } from './preferences-service.js';
 
 // Services receive the shared `services` object so they can call each other; this single
 // composition point is what a future fetch-based implementation replaces.
@@ -43,6 +44,7 @@ const FACTORIES = {
   adminCategories: createAdminCategoryService,
   dashboard: createDashboardService,
   adminUsers: createAdminUserService,
+  preferences: createPreferencesService,
 };
 
 export function createContainer({ storage, now, random, wait }) {

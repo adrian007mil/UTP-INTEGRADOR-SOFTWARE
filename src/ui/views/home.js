@@ -1,5 +1,5 @@
 import { html } from '../html.js';
-import { productCard } from '../components/product-card.js';
+import { cardFlags } from '../components/product-card.js';
 
 const FEATURED_COUNT = 4;
 const CATEGORY_ICONS = {
@@ -20,7 +20,7 @@ export function hero() {
       <div class="eyebrow"><span></span> TU MUNDO MUSICAL, EN UN SOLO LUGAR</div>
       <h1>Encuentra tu<br><em>próximo sonido.</em></h1>
       <p>Instrumentos, partituras y recursos para acompañarte en cada etapa de tu camino musical.</p>
-      <div class="hero-actions"><a class="button button-dark" href="#/catalogo">Explorar catálogo <span>↗</span></a>
+      <div class="hero-actions"><a class="button button-dark" href="#/catalogo">Explorar catálogo <span>↗</span></a><a class="button button-outline button-quiz" href="#/recomendador">Ayúdame a elegir <span>✦</span></a>
         <div class="hero-social"><div class="avatar-stack"><i>♪</i><i>♫</i><i>♬</i></div><span><b>Todo para crear</b><br>y aprender a tu ritmo</span></div></div>
     </div>${heroArt()}
     <div class="hero-bottom"><span>DESCUBRE · APRENDE · TOCA</span><span>HECHO PARA AMANTES DE LA MÚSICA <b>↗</b></span></div></section>`;
@@ -31,14 +31,14 @@ function categoryStrip(tree) {
   return html`<nav class="category-strip" aria-label="Categorías"><a class="category-chip selected" href="#/catalogo"><span>✳</span> Todo</a>${chips}</nav>`;
 }
 
-function featured(products) {
+function featured(products, flags) {
   const instruments = products.filter(p => p.tipoProducto === 'FISICO' && p.stock > 0).slice(0, FEATURED_COUNT);
   const learning = products.filter(p => p.tipoProducto !== 'FISICO').slice(0, FEATURED_COUNT);
   return html`<section class="catalog-section" id="destacados">
     <div class="section-heading"><div><div class="eyebrow">SELECCIÓN PARA TI</div><h2>Destacados<span class="brand-dot">.</span></h2>
       <p>Instrumentos y recursos que más eligen quienes empiezan.</p></div><a href="#/catalogo" class="text-link">Ver todo <span>↗</span></a></div>
-    <div class="product-grid">${instruments.map(p => productCard(p))}</div>
-    <div class="product-grid featured-learning">${learning.map(p => productCard(p))}</div></section>`;
+    <div class="product-grid">${instruments.map(cardFlags(flags))}</div>
+    <div class="product-grid featured-learning">${learning.map(cardFlags(flags))}</div></section>`;
 }
 
 function learningBanner() {
@@ -53,7 +53,7 @@ export default {
   title: 'Inicio',
   access: 'public',
   async render(ctx) {
-    const [products, tree] = await Promise.all([ctx.services.catalog.listProducts({}), ctx.services.catalog.listCategories()]);
-    return html`${hero()}${categoryStrip(tree)}${featured(products)}${learningBanner()}`;
+    const [products, tree, flags] = await Promise.all([ctx.services.catalog.listProducts({}), ctx.services.catalog.listCategories(), ctx.services.preferences.flags()]);
+    return html`${hero()}${categoryStrip(tree)}${featured(products, flags)}${learningBanner()}`;
   },
 };

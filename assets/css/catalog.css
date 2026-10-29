@@ -604,3 +604,71 @@
 .filter-panel label {
   flex-wrap:wrap;
 }
+
+.compare-bar {
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  z-index:22;
+  width:min(560px,calc(100% - 32px));
+}
+
+.compare-bar .compare-tray {
+  margin:0;
+  box-shadow:0 12px 30px #1c2a2026;
+}
+
+.compare-photo {
+  height:120px;
+  position:relative;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  margin-bottom:8px;
+  background:#e7e4d8;
+}
+
+.compare-photo .product-photo {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.compare-photo .visual {
+  font-size:48px;
+}
+
+.compare-table thead th {
+  vertical-align:top;
+  min-width:200px;
+}
+
+.compare-table thead th a {
+  display:block;
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.quiz-page {
+  display:grid;
+  grid-template-columns:minmax(300px,420px) 1fr;
+  gap:32px;
+  align-items:start;
+}
+
+.quiz-form .button {
+  width:100%;
+}
+
+@media (max-width:900px) {
+  .quiz-page {
+    grid-template-columns:1fr;
+  }
+}
+
+body:has(#compareBar .compare-tray) .toast {
+  bottom:96px;
+}

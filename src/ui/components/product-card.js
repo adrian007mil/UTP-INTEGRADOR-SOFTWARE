@@ -39,3 +39,7 @@ export function productCard(producto, flags = {}) {
       <h3><a href="#/producto/${producto.id}">${producto.nombre}</a></h3><div class="product-desc">${producto.descripcion}</div>
       <div class="product-bottom">${priceTag(producto)}${buyControl(producto)}</div></div></article>`;
 }
+
+export function cardFlags(flags) {
+  return producto => productCard(producto, { esFavorito: flags.favoritos.includes(producto.id), enComparacion: flags.comparar.includes(producto.id) });
+}

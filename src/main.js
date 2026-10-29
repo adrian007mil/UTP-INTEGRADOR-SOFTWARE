@@ -50,7 +50,7 @@ async function boot() {
   const container = createContainer({ storage, now: () => new Date(), random: browserRandom, wait: ms => new Promise(r => setTimeout(r, ms)) });
   const ui = createUi();
   bindGlobalActions(container);
-  bindProductActions(document.body, ui);
+  const productActions = bindProductActions(document.body, ui, container.services);
   bindChromeActions(ui, container.services);
   ui.cartDrawer = createCartDrawer(ui, container.services);
   setHtml($('#siteFooter'), footerView());
@@ -61,7 +61,7 @@ async function boot() {
     if (!(error instanceof StorageCorruptedError)) throw error;
     return ui.renderPage(recoveryView());
   }
-  const router = createRouter({ routes: ROUTES, ui, services: container.services, getUser: () => container.services.auth.currentUser(), onRendered: renderChrome });
+  const router = createRouter({ routes: ROUTES, ui, services: container.services, getUser: () => container.services.auth.currentUser(), onRendered: async ctx => { await renderChrome(ctx); await productActions.refreshCompareBar(); } });
   ui.refresh = router.render;
   return router.start();
 }
