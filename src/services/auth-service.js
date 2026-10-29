@@ -15,7 +15,9 @@ export function publicUser(user) {
 
 export function createAuthService({ store, collections, deps }) {
   const listeners = new Set();
-  const notify = user => listeners.forEach(listener => listener(user));
+  async function notify(user) {
+    for (const listener of listeners) await listener(user);
+  }
 
   async function ensureUnique(data) {
     const usuarios = await collections.usuarios.findAll();
@@ -30,7 +32,7 @@ export function createAuthService({ store, collections, deps }) {
     await collections.usuarios.update(user.id, { ultimoAcceso: deps.now().toISOString() });
     store.write(SESSION_KEY, { idUsuario: user.id });
     const safe = publicUser(user);
-    notify(safe);
+    await notify(safe);
     return safe;
   }
 
@@ -55,7 +57,7 @@ export function createAuthService({ store, collections, deps }) {
 
   async function logout() {
     store.write(SESSION_KEY, null);
-    notify(null);
+    await notify(null);
   }
 
   async function currentUser() {
