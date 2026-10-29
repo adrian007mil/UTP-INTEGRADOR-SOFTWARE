@@ -225,3 +225,61 @@
     border-bottom-color:#789153;
   }
 }
+
+.download-list {
+  display:grid;
+  gap:12px;
+}
+
+.download-card {
+  display:grid;
+  grid-template-columns:64px 1fr auto;
+  gap:16px;
+  align-items:center;
+  background:#fff;
+  border:1px solid var(--line);
+  padding:14px;
+}
+
+.download-card h3 {
+  font:600 14px Manrope,sans-serif;
+  margin:4px 0;
+}
+
+.download-card small {
+  font-size:11px;
+  color:var(--muted);
+}
+
+.download-visual {
+  height:64px;
+  display:grid;
+  place-items:center;
+  font-size:30px;
+  background:#e7e4d8;
+}
+
+.download-visual.lav { background:#e2ddec; }
+.download-visual.mint { background:#dce8df; }
+.download-visual.peach { background:#f0ddd0; }
+.download-visual.blue { background:#d9e3e5; }
+.download-visual.sand { background:#e9e1d1; }
+.download-visual.rose { background:#ecd9d8; }
+
+.download-actions {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+@media (max-width:650px) {
+  .download-card {
+    grid-template-columns:48px 1fr;
+  }
+
+  .download-actions {
+    grid-column:1 / -1;
+    justify-content:flex-start;
+  }
+}

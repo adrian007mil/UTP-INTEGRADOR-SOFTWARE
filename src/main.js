@@ -27,7 +27,13 @@ function createUi() {
       if (location.hash === hash) ui.refresh();
       else location.hash = hash;
     },
-    renderPage: safeHtml => { setHtml(root, safeHtml); },
+    renderPage: safeHtml => {
+      const viewRoot = document.createElement('div');
+      viewRoot.className = 'view-root';
+      setHtml(viewRoot, safeHtml);
+      root.replaceChildren(viewRoot);
+      return viewRoot;
+    },
   };
   return ui;
 }

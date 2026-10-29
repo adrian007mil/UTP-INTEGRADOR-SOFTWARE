@@ -9,6 +9,9 @@ import receipt from './views/receipt.js';
 import mailbox from './views/mailbox.js';
 import myOrders from './views/account/orders.js';
 import orderDetail from './views/account/order-detail.js';
+import downloads from './views/account/downloads.js';
+import learn from './views/learn.js';
+import learnCourse from './views/learn-course.js';
 
 export const ROUTES = [
   { pattern: '/', view: home },
@@ -22,4 +25,7 @@ export const ROUTES = [
   { pattern: '/buzon', view: mailbox },
   { pattern: '/cuenta/pedidos', view: myOrders },
   { pattern: '/cuenta/pedidos/:id', view: orderDetail },
+  { pattern: '/cuenta/descargas', view: downloads },
+  { pattern: '/aprende', view: learn },
+  { pattern: '/aprende/:id', view: learnCourse },
 ];

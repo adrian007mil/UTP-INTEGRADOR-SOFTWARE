@@ -23,8 +23,8 @@ export function createRouter({ routes, ui, services, getUser, onRendered }) {
     const ctx = buildContext(match, user);
     if (access === 'forbidden') ui.renderPage(forbiddenView());
     else {
-      ui.renderPage(await view.render(ctx));
-      view.mount?.(ui.root, ctx);
+      const viewRoot = ui.renderPage(await view.render(ctx));
+      view.mount?.(viewRoot, ctx);
       document.title = `${ctx.pageTitle ?? view.title} · ${SITE_NAME}`;
     }
     return onRendered?.(ctx);
