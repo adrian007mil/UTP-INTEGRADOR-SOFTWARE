@@ -21,6 +21,7 @@ import adminProducts from './views/admin/products.js';
 import adminProductForm from './views/admin/product-form.js';
 import adminCategories from './views/admin/categories.js';
 import adminDashboard from './views/admin/dashboard.js';
+import adminUsers from './views/admin/users.js';
 
 export const ROUTES = [
   { pattern: '/', view: home },
@@ -47,4 +48,5 @@ export const ROUTES = [
   { pattern: '/admin/productos/nuevo', view: adminProductForm },
   { pattern: '/admin/productos/:id', view: adminProductForm },
   { pattern: '/admin/categorias', view: adminCategories },
+  { pattern: '/admin/usuarios', view: adminUsers },
 ];

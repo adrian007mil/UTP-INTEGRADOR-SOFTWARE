@@ -282,3 +282,17 @@ td small {
     grid-template-columns:1fr;
   }
 }
+
+.switch {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  font-size:11px;
+}
+
+.switch input {
+  accent-color:#365643;
+  width:16px;
+  height:16px;
+}
