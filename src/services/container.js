@@ -5,6 +5,7 @@ import { ensureSeeded } from '../data/seeder.js';
 import { createCatalogService } from './catalog-service.js';
 import { createAuthService } from './auth-service.js';
 import { createCartService } from './cart-service.js';
+import { createAddressService } from './address-service.js';
 
 // Services receive the shared `services` object so they can call each other; this single
 // composition point is what a future fetch-based implementation replaces.
@@ -12,6 +13,7 @@ const FACTORIES = {
   catalog: createCatalogService,
   auth: createAuthService,
   cart: createCartService,
+  addresses: createAddressService,
 };
 
 export function createContainer({ storage, now, random, wait }) {

@@ -1,4 +1,5 @@
 import { PATTERNS, text, lengthRule, patternRule, optional, validate } from './validation.js';
+import { PERU_DEPARTMENTS } from './peru-departments.js';
 
 export const MIN_PASSWORD_LENGTH = 8;
 const NAME_LIMITS = { MIN: 2, MAX: 100 };
@@ -37,4 +38,20 @@ export function validateRegistration(data) {
 
 export function validatePasswordChange(data) {
   return validate(data, PASSWORD_SCHEMA).contrasena;
+}
+
+export const ADDRESS_LIMITS = { ALIAS: [2, 30], DIRECCION: [5, 150], LUGAR: [2, 60], REFERENCIA: [0, 100] };
+
+const ADDRESS_SCHEMA = {
+  alias: { rules: [lengthRule(...ADDRESS_LIMITS.ALIAS, 'El alias')] },
+  direccion: { rules: [lengthRule(...ADDRESS_LIMITS.DIRECCION, 'La dirección')] },
+  distrito: { rules: [lengthRule(...ADDRESS_LIMITS.LUGAR, 'El distrito')] },
+  provincia: { rules: [lengthRule(...ADDRESS_LIMITS.LUGAR, 'La provincia')] },
+  departamento: { rules: [value => (PERU_DEPARTMENTS.includes(value) ? null : 'Selecciona un departamento')] },
+  referencia: { rules: [optional(lengthRule(...ADDRESS_LIMITS.REFERENCIA, 'La referencia'))] },
+  telefono: { rules: [patternRule(PATTERNS.celular, 'El celular debe tener 9 dígitos y empezar con 9')] },
+};
+
+export function validateAddress(data) {
+  return validate(data, ADDRESS_SCHEMA, 'Revisa los datos de la dirección');
 }
