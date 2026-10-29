@@ -1,0 +1,286 @@
+.detail-layout {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+  align-items:center;
+}
+
+.detail-visual {
+  height:310px;
+  display:grid;
+  place-items:center;
+  background:#e1e7da;
+  font-size:120px;
+}
+
+.detail-copy .eyebrow {
+  font-size:9px;
+}
+
+.detail-copy h2 {
+  font:600 27px Manrope;
+  letter-spacing:-1px;
+  margin:13px 0 7px;
+}
+
+.detail-copy p {
+  font-size:12px;
+  line-height:1.7;
+  color:#747b74;
+}
+
+.detail-copy .price {
+  font-size:20px;
+  display:block;
+  margin:19px 0;
+}
+
+.detail-copy .button {
+  width:100%;
+}
+
+.detail-stock {
+  font-size:10px;
+  color:#668150;
+  margin:14px 0;
+}
+
+.detail-photo {
+  width:100%;
+  height:100%;
+  max-height:360px;
+  object-fit:contain;
+  background:#fff;
+}
+
+.image-credit {
+  display:block;
+  margin-top:15px;
+  font-size:9px;
+  line-height:1.5;
+  color:#687b50;
+}
+
+@media (max-width:650px) {
+  .detail-layout {
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
+  .detail-visual {
+    height:200px;
+    font-size:90px;
+  }
+}
+
+.product-page .detail-layout {
+  align-items:start;
+  gap:48px;
+  margin-top:22px;
+}
+
+.breadcrumb {
+  font-size:11px;
+  color:var(--muted);
+}
+
+.breadcrumb a:hover {
+  color:var(--ink);
+  text-decoration:underline;
+}
+
+.detail-media .detail-visual {
+  height:440px;
+  overflow:hidden;
+}
+
+.detail-visual.peach { background:#f0ddd0; }
+.detail-visual.blue { background:#d9e3e5; }
+.detail-visual.lav { background:#e2ddec; }
+.detail-visual.sand { background:#e9e1d1; }
+.detail-visual.rose { background:#ecd9d8; }
+.detail-visual.yellow { background:#eee7c8; }
+.detail-visual.mint { background:#dce8df; }
+.detail-visual.sage { background:#dfe5d5; }
+
+.detail-media .detail-photo {
+  max-height:none;
+  height:100%;
+}
+
+.detail-thumbs {
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+
+.detail-thumb {
+  width:64px;
+  height:64px;
+  padding:0;
+  border:1px solid var(--line);
+  background:#fff;
+}
+
+.detail-thumb img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.product-page .detail-copy h1 {
+  font:600 34px/1.1 Manrope,sans-serif;
+  letter-spacing:-1.2px;
+  margin:12px 0 10px;
+}
+
+.product-page .detail-copy p {
+  font-size:14px;
+}
+
+.detail-facts {
+  margin:10px 0 0;
+  padding-left:18px;
+  font-size:12px;
+  color:#5f675f;
+  line-height:1.8;
+}
+
+.product-page .detail-copy .price {
+  font-size:26px;
+}
+
+.detail-stock.out {
+  color:#b17866;
+}
+
+.button:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.detail-syllabus {
+  margin-top:40px;
+  padding-top:24px;
+  border-top:1px solid var(--line);
+}
+
+.detail-syllabus h3 {
+  font:600 20px Manrope,sans-serif;
+  margin:0 0 12px;
+}
+
+.detail-syllabus ol {
+  margin:0 0 14px;
+  padding-left:20px;
+  line-height:2;
+  font-size:13px;
+}
+
+@media (max-width:650px) {
+  .detail-media .detail-visual {
+    height:280px;
+  }
+
+  .product-page .detail-copy h1 {
+    font-size:26px;
+  }
+}
+
+.reviews {
+  margin-top:40px;
+  padding-top:24px;
+  border-top:1px solid var(--line);
+  max-width:760px;
+}
+
+.reviews h3 {
+  font:600 20px Manrope,sans-serif;
+  margin:0 0 14px;
+}
+
+.review-locked {
+  font-size:12px;
+  color:var(--muted);
+  background:#f7f6f2;
+  padding:12px 14px;
+}
+
+.review-form {
+  background:#fff;
+  border:1px solid var(--line);
+  padding:18px;
+  margin-bottom:18px;
+}
+
+.star-input {
+  border:0;
+  padding:0;
+  margin:0;
+  font-size:11px;
+  color:#687168;
+}
+
+.star-row {
+  display:inline-flex;
+  flex-direction:row-reverse;
+  gap:2px;
+}
+
+.star-row input {
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.star-row label {
+  font-size:26px;
+  color:#d6d3c8;
+  cursor:pointer;
+}
+
+.star-row input:checked ~ label,
+.star-row label:hover,
+.star-row label:hover ~ label {
+  color:#c59b3c;
+}
+
+.star-row input:focus-visible + label {
+  outline:2px solid #718751;
+}
+
+.review-list {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+.review-list li {
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.review-head {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  font-size:12px;
+}
+
+.review-head time {
+  color:var(--muted);
+  font-size:11px;
+}
+
+.review-list p {
+  margin:6px 0 0;
+  font-size:13px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+
+.stars {
+  color:#c59b3c;
+  letter-spacing:1px;
+}

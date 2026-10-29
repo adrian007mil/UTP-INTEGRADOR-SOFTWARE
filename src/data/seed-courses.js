@@ -1,0 +1,51 @@
+export const SEED_COURSES = [
+  {
+    idPrototipo: 14, nombre: 'Curso audiovisual: primeros pasos en teclado',
+    descripcion: 'Lecciones breves de postura, notas y práctica inicial', precio: 69,
+    visual: '▶', tono: 'peach', etiqueta: 'CURSO · VIDEO', duracionMin: 45, archivo: 'curso-primeros-pasos-teclado',
+    videoId: '2dTm75ak6lQ', videoTitulo: 'Clases de piano desde cero · Curso para principiantes',
+    capitulos: ['Postura frente al teclado', 'Ubica el do central', 'Notas de la mano derecha', 'Acompañamiento con la mano izquierda', 'Tu primera melodía completa'],
+  },
+  {
+    idPrototipo: 16, nombre: 'Tu primera canción en guitarra',
+    descripcion: 'Conoce acordes iniciales, rasgueo y cambios sencillos para tocar tu primera canción.', precio: 29,
+    visual: '♬', tono: 'peach', etiqueta: 'PARTITURA · NIVEL INICIAL', duracionMin: 35, archivo: 'curso-primera-cancion-guitarra',
+    videoId: 'eJGs9_kgRyg', videoTitulo: 'Aprende guitarra desde cero · clase para principiantes',
+    capitulos: ['Conoce la guitarra y sus cuerdas', 'Postura y afinación básica', 'Primeros acordes', 'Rasgueo y ritmo', 'Cambia de acorde y toca una canción'],
+  },
+  {
+    idPrototipo: 17, nombre: 'Lee música a tu propio ritmo',
+    descripcion: 'Identifica las notas principales del teclado y practica una escala inicial con ambas manos.', precio: 24,
+    visual: '▥', tono: 'blue', etiqueta: 'GUÍA · PIANO', duracionMin: 30, archivo: 'curso-lee-musica',
+    videoId: '2dTm75ak6lQ', videoTitulo: 'Clases de piano desde cero · Curso para principiantes',
+    capitulos: ['Ubica las notas en el teclado', 'Numeración y postura de los dedos', 'Toca una escala inicial', 'Coordina ambas manos', 'Practica una melodía sencilla'],
+  },
+  {
+    idPrototipo: 18, nombre: 'Cómo afinar tu instrumento',
+    descripcion: 'Observa cómo preparar y afinar una guitarra antes de empezar a practicar.', precio: 19,
+    visual: '▷', tono: 'mint', etiqueta: 'VIDEO · 12 MIN', duracionMin: 12, archivo: 'curso-afinar-instrumento',
+    videoId: 'eJGs9_kgRyg', videoTitulo: 'Afinación y primeros pasos con guitarra',
+    capitulos: ['Identifica las partes de la guitarra', 'Reconoce el nombre de cada cuerda', 'Ajusta la afinación paso a paso', 'Comprueba la afinación antes de tocar'],
+  },
+  {
+    idPrototipo: 19, nombre: 'Practica con constancia',
+    descripcion: 'Prueba una secuencia breve de ritmo, coordinación y práctica con cajón.', precio: 24,
+    visual: '♪', tono: 'sand', etiqueta: 'RUTA · PRINCIPIANTE', duracionMin: 25, archivo: 'curso-practica-constancia',
+    videoId: '85pUJTV1dLA', videoTitulo: 'Primeros pasos para aprender cajón peruano',
+    capitulos: ['Posición y postura al tocar', 'Colocación de las manos', 'Sonidos graves y agudos', 'Primeros patrones rítmicos', 'Rutina breve para practicar'],
+  },
+  {
+    idPrototipo: 20, nombre: 'Clásicos para piano',
+    descripcion: 'Repasa lectura de notas y una escala que te ayudará a abordar piezas sencillas.', precio: 39,
+    visual: '𝄞', tono: 'lav', etiqueta: 'PARTITURA · INTERMEDIO', duracionMin: 40, archivo: 'curso-clasicos-piano',
+    videoId: '2dTm75ak6lQ', videoTitulo: 'Clases de piano desde cero · Curso para principiantes',
+    capitulos: ['Repasa notas y figuras musicales', 'Lectura de una melodía', 'Digitación y control del pulso', 'Coordina melodía y acompañamiento', 'Prepara una pieza corta'],
+  },
+  {
+    idPrototipo: 21, nombre: 'El ritmo está en tus manos',
+    descripcion: 'Aprende la posición de las manos, dinámicas y patrones básicos de cajón.', precio: 29,
+    visual: '◉', tono: 'rose', etiqueta: 'VIDEO · 18 MIN', duracionMin: 18, archivo: 'curso-ritmo-manos',
+    videoId: '85pUJTV1dLA', videoTitulo: 'Primeros pasos para aprender cajón peruano',
+    capitulos: ['Calentamiento de manos', 'Golpe grave y golpe agudo', 'Alternancia y coordinación', 'Arma un patrón de festejo básico', 'Practica con pulso constante'],
+  },
+];

@@ -1,0 +1,298 @@
+.metrics {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin:25px 0;
+}
+
+.metrics article {
+  background:#fff;
+  border:1px solid var(--line);
+  padding:17px;
+}
+
+.metrics article span {
+  display:block;
+  color:#81867e;
+  font-size:8px;
+  letter-spacing:1px;
+}
+
+.metrics article b {
+  display:block;
+  font:700 24px Manrope;
+  margin:9px 0 5px;
+}
+
+.metrics article small {
+  font-size:9px;
+  color:#7d837a;
+}
+
+.metrics article .positive {
+  color:#658348;
+}
+
+.warning-text {
+  color:#b27d42;
+}
+
+.admin-table-wrap {
+  background:#fff;
+  border:1px solid var(--line);
+}
+
+.table-title {
+  padding:16px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.table-title h3 {
+  font:600 14px Manrope;
+  margin:0;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  text-align:left;
+}
+
+th {
+  font-size:8px;
+  letter-spacing:.8px;
+  color:#858a80;
+  background:#f7f6f2;
+  padding:11px 15px;
+}
+
+td {
+  font-size:10px;
+  padding:12px 15px;
+  border-top:1px solid #eeede8;
+}
+
+td:first-child {
+  font-weight:600;
+}
+
+.status-pill {
+  border-radius:99px;
+  background:#e7efdf;
+  color:#526a42;
+  padding:5px 8px;
+  font-size:8px;
+}
+
+.status-pill.low {
+  background:#f4ead7;
+  color:#9a7337;
+}
+
+@media (max-width:650px) {
+  .metrics {
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .admin-table-wrap {
+    overflow:auto;
+  }
+
+  table {
+    min-width:630px;
+  }
+}
+
+.admin-nav {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:28px;
+  border-bottom:1px solid var(--line);
+}
+
+.admin-nav a {
+  padding:10px 14px;
+  font-size:12px;
+  color:#68706a;
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+}
+
+.admin-nav a.active {
+  color:var(--ink);
+  font-weight:700;
+  border-bottom-color:#789153;
+}
+
+.admin-filters {
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  align-items:center;
+  margin-bottom:16px;
+}
+
+.admin-filters .search-box {
+  width:min(420px,100%);
+}
+
+.row-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px 12px;
+}
+
+td small {
+  color:var(--muted);
+  font-weight:400;
+}
+
+.admin-view .section-heading .button {
+  white-space:nowrap;
+}
+
+.row-disabled td {
+  opacity:.55;
+}
+
+.form-actions {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-top:8px;
+}
+
+.product-form .form-actions .button {
+  width:auto;
+  margin-top:0;
+  padding-left:28px;
+  padding-right:28px;
+}
+
+.admin-split {
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:24px;
+  align-items:start;
+}
+
+.category-tree,
+.category-tree ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+.category-tree {
+  background:#fff;
+  border:1px solid var(--line);
+}
+
+.category-parent + .category-parent {
+  border-top:1px solid var(--line);
+}
+
+.category-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  font-size:13px;
+}
+
+.category-tree ul .category-row {
+  padding-left:36px;
+  background:#faf9f6;
+  font-size:12px;
+}
+
+.category-row small {
+  color:var(--muted);
+  margin-left:6px;
+}
+
+@media (max-width:900px) {
+  .admin-split {
+    grid-template-columns:1fr;
+  }
+}
+
+.range-form input[type="date"] {
+  border:1px solid var(--line);
+  background:#fff;
+  padding:8px;
+  font-size:12px;
+}
+
+.range-form .button {
+  padding:10px 14px;
+}
+
+.admin-columns {
+  display:grid;
+  grid-template-columns:1fr 1.4fr;
+  gap:16px;
+  align-items:start;
+}
+
+.admin-card {
+  overflow:auto;
+}
+
+.alert-list {
+  list-style:none;
+  margin:0;
+  padding:0 18px 12px;
+}
+
+.alert-list li {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 0;
+  border-top:1px solid #eeede8;
+  font-size:12px;
+}
+
+.alert-list li span:first-child {
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.alert-list small {
+  color:var(--muted);
+}
+
+.admin-card .muted {
+  padding:0 18px 16px;
+}
+
+.admin-reset {
+  margin-top:28px;
+  text-align:right;
+}
+
+@media (max-width:900px) {
+  .admin-columns {
+    grid-template-columns:1fr;
+  }
+}
+
+.switch {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  font-size:11px;
+}
+
+.switch input {
+  accent-color:#365643;
+  width:16px;
+  height:16px;
+}
