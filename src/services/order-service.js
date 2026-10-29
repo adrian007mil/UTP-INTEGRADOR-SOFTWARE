@@ -32,5 +32,19 @@ export function createOrderService({ collections, services }) {
     return { ...detail, comprobante, cliente };
   }
 
-  return { getMyOrder, getReceipt, orderDetail, authorizedOrder };
+  async function listMyOrders() {
+    const user = await services.auth.requireUser();
+    const [pedidos, detalles, envios] = await Promise.all([
+      collections.pedidos.findBy(p => p.idUsuario === user.id), collections.detallesPedido.findAll(), collections.envios.findAll(),
+    ]);
+    return pedidos.sort((a, b) => b.fechaPedido.localeCompare(a.fechaPedido) || b.id - a.id).map(pedido => ({
+      pedido,
+      cantidadItems: detalles.filter(d => d.idPedido === pedido.id).reduce((sum, d) => sum + d.cantidad, 0),
+      estadoEnvio: envios.find(e => e.idPedido === pedido.id)?.estado ?? null,
+    }));
+  }
+
+  const advanceShipment = idPedido => services.shipments.advance(idPedido);
+
+  return { getMyOrder, getReceipt, listMyOrders, advanceShipment, orderDetail, authorizedOrder };
 }
