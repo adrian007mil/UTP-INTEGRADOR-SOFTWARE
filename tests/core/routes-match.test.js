@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { matchRoute, resolveAccess, NOT_FOUND } from '../../src/core/routes-match.js';
+import { matchRoute, resolveAccess, safeReturnPath, NOT_FOUND } from '../../src/core/routes-match.js';
 
 const ROUTES = [
   { pattern: '/', access: 'public' },
@@ -46,4 +46,12 @@ test('resolveAccess', () => {
   assert.equal(resolveAccess('admin', null), 'login');
   assert.equal(resolveAccess('admin', { rol: 'CLIENTE' }), 'forbidden');
   assert.equal(resolveAccess('admin', { rol: 'ADMIN' }), 'allow');
+});
+
+test('safeReturnPath solo acepta rutas internas', () => {
+  assert.equal(safeReturnPath('/checkout'), '/checkout');
+  assert.equal(safeReturnPath('/catalogo?q=a'), '/catalogo?q=a');
+  assert.equal(safeReturnPath('//evil.com'), '/');
+  assert.equal(safeReturnPath('https://evil.com'), '/');
+  assert.equal(safeReturnPath(null), '/');
 });

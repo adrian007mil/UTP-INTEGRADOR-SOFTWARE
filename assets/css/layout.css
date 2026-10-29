@@ -229,3 +229,81 @@
   display:flex;
   align-items:center;
 }
+
+.account-link {
+  font-size:12px;
+  color:#475248;
+  white-space:nowrap;
+}
+
+.account-menu {
+  position:relative;
+  font-size:12px;
+}
+
+.account-menu summary {
+  list-style:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#475248;
+  white-space:nowrap;
+}
+
+.account-menu summary::-webkit-details-marker {
+  display:none;
+}
+
+.account-dropdown {
+  position:absolute;
+  right:0;
+  top:calc(100% + 12px);
+  min-width:210px;
+  background:#fbfaf7;
+  border:1px solid var(--line);
+  box-shadow:0 12px 28px #1c2a2018;
+  display:flex;
+  flex-direction:column;
+  z-index:25;
+}
+
+.account-dropdown a,
+.account-dropdown button {
+  padding:11px 16px;
+  border:0;
+  background:none;
+  text-align:left;
+  font-size:12px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.account-dropdown a:hover,
+.account-dropdown button:hover {
+  background:#eef1e9;
+}
+
+.account-dropdown button {
+  border-top:1px solid var(--line);
+  color:#9b4f43;
+}
+
+.badge-count {
+  min-width:17px;
+  height:17px;
+  padding:0 4px;
+  border-radius:99px;
+  background:#c0614f;
+  color:#fff;
+  font-size:9px;
+  display:inline-grid;
+  place-items:center;
+}
+
+@media (max-width:650px) {
+  .account-link span + *,
+  .account-menu summary {
+    font-size:11px;
+  }
+}

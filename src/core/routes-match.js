@@ -35,3 +35,8 @@ export function resolveAccess(access, user) {
   if (access === 'admin' && user.rol !== 'ADMIN') return 'forbidden';
   return 'allow';
 }
+
+export function safeReturnPath(value) {
+  const path = String(value ?? '');
+  return path.startsWith('/') && !path.startsWith('//') ? path : '/';
+}

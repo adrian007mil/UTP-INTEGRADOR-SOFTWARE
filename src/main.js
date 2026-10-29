@@ -6,7 +6,7 @@ import { createRouter } from './ui/router.js';
 import { createToast } from './ui/toast.js';
 import { createModal } from './ui/modal.js';
 import { $, setHtml, delegate } from './ui/dom.js';
-import { headerView } from './ui/layout/header.js';
+import { renderChrome, bindChromeActions } from './ui/layout/chrome.js';
 import { footerView } from './ui/layout/footer.js';
 import { recoveryView } from './ui/views/recovery.js';
 import { ROUTES } from './ui/routes.js';
@@ -17,13 +17,18 @@ const NOT_PERSISTENT_MESSAGE = 'Tu navegador no permite guardar datos: los cambi
 function createUi() {
   const root = $('#app');
   const modal = createModal({ modal: $('#modal'), overlay: $('#overlay'), content: $('#modalContent'), closeButton: $('#modalClose') });
-  return {
+  const ui = {
     root,
     modal,
     toast: createToast($('#toast')),
-    navigate: hash => { location.hash = hash; },
+    refresh: async () => {},
+    navigate: hash => {
+      if (location.hash === hash) ui.refresh();
+      else location.hash = hash;
+    },
     renderPage: safeHtml => { setHtml(root, safeHtml); },
   };
+  return ui;
 }
 
 function bindGlobalActions(container) {
@@ -31,11 +36,6 @@ function bindGlobalActions(container) {
     container.store.clearAll();
     location.reload();
   });
-  delegate(document.body, 'click', '#menuToggle', () => $('#mainNav')?.classList.toggle('mobile-open'));
-}
-
-async function renderChrome(ctx) {
-  setHtml($('#siteHeader'), headerView({ user: ctx.user, path: ctx.path }));
 }
 
 async function boot() {
@@ -44,6 +44,7 @@ async function boot() {
   const ui = createUi();
   bindGlobalActions(container);
   bindProductActions(document.body, ui);
+  bindChromeActions(ui, container.services);
   setHtml($('#siteFooter'), footerView());
   if (!persistent) ui.toast(NOT_PERSISTENT_MESSAGE);
   try {
@@ -52,7 +53,8 @@ async function boot() {
     if (!(error instanceof StorageCorruptedError)) throw error;
     return ui.renderPage(recoveryView());
   }
-  const router = createRouter({ routes: ROUTES, ui, services: container.services, getUser: async () => null, onRendered: renderChrome });
+  const router = createRouter({ routes: ROUTES, ui, services: container.services, getUser: () => container.services.auth.currentUser(), onRendered: renderChrome });
+  ui.refresh = router.render;
   return router.start();
 }
 
