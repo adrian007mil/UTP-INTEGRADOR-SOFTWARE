@@ -16,6 +16,7 @@ import profile from './views/account/profile.js';
 import addresses from './views/account/addresses.js';
 import forgotPassword from './views/forgot-password.js';
 import resetPassword from './views/reset-password.js';
+import adminOrders from './views/admin/orders.js';
 
 export const ROUTES = [
   { pattern: '/', view: home },
@@ -36,4 +37,5 @@ export const ROUTES = [
   { pattern: '/cuenta/direcciones', view: addresses },
   { pattern: '/recuperar', view: forgotPassword },
   { pattern: '/restablecer/:token', view: resetPassword },
+  { pattern: '/admin/pedidos', view: adminOrders },
 ];

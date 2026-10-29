@@ -104,3 +104,52 @@ td:first-child {
     min-width:630px;
   }
 }
+
+.admin-nav {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:28px;
+  border-bottom:1px solid var(--line);
+}
+
+.admin-nav a {
+  padding:10px 14px;
+  font-size:12px;
+  color:#68706a;
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+}
+
+.admin-nav a.active {
+  color:var(--ink);
+  font-weight:700;
+  border-bottom-color:#789153;
+}
+
+.admin-filters {
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  align-items:center;
+  margin-bottom:16px;
+}
+
+.admin-filters .search-box {
+  width:min(420px,100%);
+}
+
+.row-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px 12px;
+}
+
+td small {
+  color:var(--muted);
+  font-weight:400;
+}
+
+.admin-view .section-heading .button {
+  white-space:nowrap;
+}
