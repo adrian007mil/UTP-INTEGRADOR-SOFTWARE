@@ -1,0 +1,64 @@
+.form-modal {
+  max-width:400px;
+  margin:10px auto;
+}
+
+.form-modal h2 {
+  font:600 24px Manrope;
+  margin:10px 0;
+}
+
+.form-modal p {
+  font-size:11px;
+  color:#7b8178;
+  line-height:1.6;
+}
+
+.form-field {
+  display:block;
+  margin:14px 0;
+  color:#687168;
+  font-size:10px;
+}
+
+.form-field input,.form-field select,.form-field textarea {
+  display:block;
+  width:100%;
+  padding:11px;
+  margin-top:6px;
+  background:#fff;
+  border:1px solid #e2e0d9;
+  outline-color:#8fa174;
+  font-size:11px;
+}
+
+.form-modal .button {
+  width:100%;
+  margin-top:8px;
+}
+
+.form-note {
+  text-align:center;
+  font-size:9px!important;
+}
+
+.checkout-step {
+  display:flex;
+  gap:8px;
+  margin:18px 0;
+}
+
+.checkout-step span {
+  flex:1;
+  padding:9px;
+  text-align:center;
+  background:#efeee9;
+  color:#878a81;
+  font-size:9px;
+}
+
+.checkout-step span.current {
+  background:#e4ebdd;
+  color:#41573b;
+  font-weight:700;
+}

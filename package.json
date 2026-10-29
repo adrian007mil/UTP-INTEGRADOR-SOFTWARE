@@ -5,6 +5,7 @@
   "description": "Frontend de la tienda musical OmniMelody",
   "type": "module",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "start": "node tools/serve.js"
   }
 }
