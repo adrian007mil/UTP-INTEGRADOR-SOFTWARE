@@ -2,25 +2,17 @@ import { ConflictError } from '../core/errors.js';
 import { nextReceiptNumber } from '../core/receipt-number.js';
 import { COURIER_NAME, SHIPMENT_DESCRIPTIONS } from '../core/shipment-state.js';
 import { formatMoney } from '../core/money.js';
+import { syncStockAlert } from './stock-alerts.js';
 
 export function createFulfillmentService({ collections, services, deps }) {
   const timestamp = () => deps.now().toISOString();
-
-  async function raiseAlertIfLow(inventario) {
-    if (inventario.stock > inventario.stockMinimo) return;
-    const pending = await collections.alertasStock.findOneBy(a => a.idProducto === inventario.idProducto && a.estado === 'PENDIENTE');
-    if (pending) return;
-    await collections.alertasStock.insert({
-      idProducto: inventario.idProducto, stockActual: inventario.stock, stockMinimo: inventario.stockMinimo, fechaAlerta: timestamp(), estado: 'PENDIENTE',
-    });
-  }
 
   async function discountStock(detalles) {
     for (const detalle of detalles.filter(d => d.tipoProducto === 'FISICO')) {
       const inventario = await collections.inventario.findOneBy(i => i.idProducto === detalle.idProducto);
       if (!inventario || inventario.stock < detalle.cantidad) throw new ConflictError(`Ya no hay stock suficiente de ${detalle.nombre}`);
       const updated = await collections.inventario.update(inventario.id, { stock: inventario.stock - detalle.cantidad, fechaActualizacion: timestamp() });
-      await raiseAlertIfLow(updated);
+      await syncStockAlert(collections, updated, timestamp());
     }
   }
 
